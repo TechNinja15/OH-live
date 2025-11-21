@@ -7,6 +7,9 @@ const getAiClient = () => {
     console.warn("API_KEY is not set. Gemini features will be disabled.");
     return null;
   }
+  // Note: Using the client directly will rely on Vercel to inject process.env.API_KEY
+  // which may require a VITE_ prefix if used client-side without SSR/SSG.
+  // For Vercel Serverless Functions, process.env works.
   return new GoogleGenAI({ apiKey });
 };
 
@@ -31,7 +34,8 @@ export const generateIceBreaker = async (
       contents: prompt,
     });
 
-    return response.text.trim();
+    // FIX TS18048: Add '!' to assert response.text is not null/undefined
+    return response.text!.trim(); 
   } catch (error) {
     console.error("Gemini Error:", error);
     return "Hey! What's your favorite thing about your major?";
@@ -59,7 +63,8 @@ export const checkCompatibility = async (
       contents: prompt,
     });
 
-    return response.text.trim();
+    // FIX TS18048: Add '!' to assert response.text is not null/undefined
+    return response.text!.trim(); 
   } catch (error) {
     return "You both seem to have unique tastes!";
   }
