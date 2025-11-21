@@ -2,14 +2,12 @@ import { GoogleGenAI } from "@google/genai";
 import { MatchProfile } from "../types";
 
 const getAiClient = () => {
+  // NOTE: This assumes the API key is set in Vercel's Environment Variables
   const apiKey = process.env.API_KEY;
   if (!apiKey) {
     console.warn("API_KEY is not set. Gemini features will be disabled.");
     return null;
   }
-  // Note: Using the client directly will rely on Vercel to inject process.env.API_KEY
-  // which may require a VITE_ prefix if used client-side without SSR/SSG.
-  // For Vercel Serverless Functions, process.env works.
   return new GoogleGenAI({ apiKey });
 };
 
